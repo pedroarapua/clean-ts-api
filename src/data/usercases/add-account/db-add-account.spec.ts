@@ -13,7 +13,7 @@ const makeHasher = (): Hasher => {
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
     async loadByEmail (email: string): Promise<AccountModel> {
-      return new Promise<AccountModel>(resolve => resolve(makeFakeAccount()))
+      return new Promise<AccountModel>(resolve => resolve(null))
     }
   }
   return new LoadAccountByEmailRepositoryStub()
@@ -102,5 +102,12 @@ describe('DbAddAccount Usecase', () => {
     const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
     await sut.add(makeFakeAccount())
     expect(loadSpy).toHaveBeenCalledWith('valid_email@mail.com')
+  })
+
+  test('Should return null if LoadAccountByEmailRepository not return null', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockResolvedValueOnce(makeFakeAccount())
+    const account = await sut.add(makeFakeAccountData())
+    expect(account).toBeNull()
   })
 })
