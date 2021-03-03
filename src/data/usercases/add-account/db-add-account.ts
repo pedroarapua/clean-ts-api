@@ -1,4 +1,4 @@
-import { AddAccountRepository } from '../../protocols/db/add-account-respository'
+import { AddAccountRepository } from '../../protocols/db/account/add-account-respository'
 import { AddAccount, AddAccountModel, AccountModel, Hasher } from './db-add-account-protocols'
 
 export class DbAddAccount implements AddAccount {
